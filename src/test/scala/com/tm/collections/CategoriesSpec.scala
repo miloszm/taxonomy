@@ -66,10 +66,16 @@ class CategoriesSpec extends WordSpec with Matchers {
       }
     }
 
-    "retrieve nodes with a tag" in {
+    "retrieve multiple nodes with a tag" in {
       categories.getNodesWithTag(TagId("chinese")) should contain theSameElementsAs List(
         CategoryNode(Id("chinese1"), "chinese", Nil, Seq(TagId("chinese"))),
         CategoryNode(Id("chinese2"), "chinese", Nil, Seq(TagId("chinese")))
+      )
+    }
+
+    "retrieve non-leaf node with a tag" in {
+      categories.getNodesWithTag(TagId("restaurant")).map(_.copy(children = Nil)) should contain theSameElementsAs List(
+        CategoryNode(Id("restaurants"), "restaurants", Nil, Seq(TagId("restaurant")))
       )
     }
 
