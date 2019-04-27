@@ -2,7 +2,9 @@ package com.tm.domain
 
 import scala.annotation.tailrec
 
-case class CategoryNode(id: Id, children: Seq[CategoryNode]){
+case class Id(id: String)
+
+case class CategoryNode(id: Id, children: Seq[CategoryNode], tags: Seq[TagId] = Nil){
   def getNode(id: Id): Option[CategoryNode] = {
     if (this.id == id) Some(this)
     else {
@@ -18,5 +20,7 @@ case class CategoryNode(id: Id, children: Seq[CategoryNode]){
     }
   }
   def getDescendants: Seq[CategoryNode] = children ++ children.flatMap(_.getDescendants)
+  def getNodesWithTag(tagId: TagId): Seq[CategoryNode] =
+    List(this).filter(_.tags.exists(_ == tagId)) ++ children.flatMap(_.getNodesWithTag(tagId))
 }
 

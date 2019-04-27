@@ -1,7 +1,7 @@
 package collections
 
 import com.tm.collections.Categories
-import com.tm.domain.{CategoryNode, Id}
+import com.tm.domain.{CategoryNode, Id, TagId}
 import org.scalatest.{Matchers, WordSpec}
 
 
@@ -14,7 +14,7 @@ object TestCategories extends Categories {
         CategoryNode(Id("theatre"), Nil),
         CategoryNode(Id("films"),
           List(
-            CategoryNode(Id("chinese"), Nil),
+            CategoryNode(Id("chinese"), Nil, Seq(TagId("chinese"))),
             CategoryNode(Id("comedy"), Nil),
             CategoryNode(Id("action"), Nil)
           )
@@ -30,10 +30,11 @@ object TestCategories extends Categories {
     ),
     CategoryNode(Id("restaurants"),
       List(
-        CategoryNode(Id("chinese"), Nil),
+        CategoryNode(Id("chinese"), Nil, Seq(TagId("chinese"))),
         CategoryNode(Id("french"), Nil),
         CategoryNode(Id("italian"), Nil)
-      )
+      ),
+      Seq(TagId("restaurant"))
     )
   )
   override val root = CategoryNode(Id("categories"), children)
@@ -63,6 +64,13 @@ class CategoriesSpec extends WordSpec with Matchers {
           CategoryNode(Id("rock"), Nil)
         )
       }
+    }
+
+    "retrieve nodes with a tag" in {
+      categories.getNodesWithTag(TagId("chinese")) should contain theSameElementsAs List(
+        CategoryNode(Id("chinese"), Nil, Seq(TagId("chinese"))),
+        CategoryNode(Id("chinese"), Nil, Seq(TagId("chinese")))
+      )
     }
 
   }
