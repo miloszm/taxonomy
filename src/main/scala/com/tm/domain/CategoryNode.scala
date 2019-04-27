@@ -10,6 +10,8 @@ case class CategoryNode(id: Id, name: String, children: Seq[CategoryNode], tags:
 
   def getDescendants: Seq[CategoryNode] = children.flatMap(_.findAll(_ => true))
 
+  def getDescendantsWithLevel(level: Int): Seq[(CategoryNode,Int)] = findAllWithLevel(_ => true, level)
+
   def getNodesWithTag(tagId: TagId): Seq[CategoryNode] = findAll(_.tags.exists(_ == tagId))
 
   def findFirst(f: CategoryNode => Boolean): Option[CategoryNode] = {
@@ -30,5 +32,14 @@ case class CategoryNode(id: Id, name: String, children: Seq[CategoryNode], tags:
   def findAll(f: CategoryNode => Boolean): Seq[CategoryNode] = {
     List(this).filter(f) ++ children.flatMap(_.findAll(f))
   }
+
+  def findAllWithLevel(f: CategoryNode => Boolean, level: Int): Seq[(CategoryNode,Int)] = {
+    List(this).filter(f).map((_,level)) ++ children.flatMap(_.findAllWithLevel(f, level + 1))
+  }
+
+  def asCsv: String = {
+    (name +: tags.map(_.id)).mkString(",")
+  }
+
 }
 

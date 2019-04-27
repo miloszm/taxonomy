@@ -1,6 +1,6 @@
 package com.tm.collections
 
-import com.tm.domain.{CategoryNode, Id, TagId}
+import com.tm.domain.{CategoryNode, Id, Lang, TagId}
 
 
 trait Categories {
@@ -13,7 +13,11 @@ trait Categories {
 
   def getNodesWithTag(tagId: TagId): Seq[CategoryNode] = root.getNodesWithTag(tagId)
 
-  def toCsv: Stream[String]
+  def toCsv(lang: Lang): Stream[String] = {
+    root.getDescendantsWithLevel(0).toStream.map{
+      case (node, level) => ("," * level) + s"${node.asCsv}"
+    }
+  }
 
   def fromCsv(csv: Stream[String]): Categories
 

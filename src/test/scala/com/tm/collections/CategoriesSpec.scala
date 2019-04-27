@@ -1,7 +1,7 @@
 package collections
 
 import com.tm.collections.Categories
-import com.tm.domain.{CategoryNode, Id, TagId}
+import com.tm.domain.{CategoryNode, Id, Lang, TagId}
 import org.scalatest.{Matchers, WordSpec}
 
 
@@ -39,8 +39,6 @@ object TestCategories extends Categories {
   )
   override val root = CategoryNode(Id("categories"), "categories", children)
 
-  override def toCsv = ???
-
   override def fromCsv(csv: Stream[String]) = ???
 }
 
@@ -76,6 +74,26 @@ class CategoriesSpec extends WordSpec with Matchers {
     "retrieve non-leaf node with a tag" in {
       categories.getNodesWithTag(TagId("restaurant")).map(_.copy(children = Nil)) should contain theSameElementsAs List(
         CategoryNode(Id("restaurants"), "restaurants", Nil, Seq(TagId("restaurant")))
+      )
+    }
+
+    "serialise a tree to CSV" in {
+      categories.toCsv(Lang("it_IT")).toList should contain theSameElementsInOrderAs List(
+        "categories",
+        ",shows",
+        ",,theatre",
+        ",,films",
+        ",,,chinese,chinese",
+        ",,,comedy",
+        ",,,action",
+        ",music",
+        ",,jazz",
+        ",,pop",
+        ",,rock",
+        ",restaurants,restaurant",
+        ",,chinese,chinese",
+        ",,french",
+        ",,italian"
       )
     }
 
