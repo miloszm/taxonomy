@@ -4,9 +4,11 @@ import com.tm.domain.{CategoryNode, Id}
 
 trait Categories {
 
-  def getNode(id: Id): Option[CategoryNode]
+  def root: CategoryNode
 
-  def getDescendants(categoryNode: CategoryNode): Seq[CategoryNode]
+  def getNode(id: Id): Option[CategoryNode] = root.getNode(id)
+
+  def getDescendants(categoryNode: CategoryNode): Seq[CategoryNode] = categoryNode.getDescendants
 
   def toCsv: Stream[String]
 

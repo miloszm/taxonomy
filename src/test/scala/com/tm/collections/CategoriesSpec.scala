@@ -2,7 +2,7 @@ package collections
 
 import com.tm.collections.Categories
 import com.tm.domain.{CategoryNode, Id}
-import org.scalatest.{FlatSpec, Matchers, WordSpec}
+import org.scalatest.{Matchers, WordSpec}
 
 
 
@@ -36,11 +36,7 @@ object TestCategories extends Categories {
       )
     )
   )
-  val root = CategoryNode(Id("categories"), children)
-
-  override def getNode(id: Id): Option[CategoryNode] = root.getNode(id)
-
-  override def getDescendants(categoryNode: CategoryNode): Seq[CategoryNode] = categoryNode.getDescendants
+  override val root = CategoryNode(Id("categories"), children)
 
   override def toCsv = ???
 

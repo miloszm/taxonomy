@@ -1,7 +1,5 @@
 package com.tm.domain
 
-import scala.annotation.tailrec
-
 
 case class Lang(lang: String)
 
