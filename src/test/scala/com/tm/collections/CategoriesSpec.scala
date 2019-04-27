@@ -9,35 +9,35 @@ import org.scalatest.{Matchers, WordSpec}
 object TestCategories extends Categories {
 
   val children = List(
-    CategoryNode(Id("shows"),
+    CategoryNode(Id("shows"), "shows",
       List(
-        CategoryNode(Id("theatre"), Nil),
-        CategoryNode(Id("films"),
+        CategoryNode(Id("theatre"), "theatre", Nil),
+        CategoryNode(Id("films"), "films",
           List(
-            CategoryNode(Id("chinese"), Nil, Seq(TagId("chinese"))),
-            CategoryNode(Id("comedy"), Nil),
-            CategoryNode(Id("action"), Nil)
+            CategoryNode(Id("chinese1"), "chinese", Nil, Seq(TagId("chinese"))),
+            CategoryNode(Id("comedy"), "comedy", Nil),
+            CategoryNode(Id("action"), "action", Nil)
           )
         )
       )
     ),
-    CategoryNode(Id("music"),
+    CategoryNode(Id("music"), "music",
       List(
-        CategoryNode(Id("jazz"), Nil),
-        CategoryNode(Id("pop"), Nil),
-        CategoryNode(Id("rock"), Nil)
+        CategoryNode(Id("jazz"), "jazz", Nil),
+        CategoryNode(Id("pop"), "pop", Nil),
+        CategoryNode(Id("rock"), "rock", Nil)
       )
     ),
-    CategoryNode(Id("restaurants"),
+    CategoryNode(Id("restaurants"), "restaurants",
       List(
-        CategoryNode(Id("chinese"), Nil, Seq(TagId("chinese"))),
-        CategoryNode(Id("french"), Nil),
-        CategoryNode(Id("italian"), Nil)
+        CategoryNode(Id("chinese2"), "chinese", Nil, Seq(TagId("chinese"))),
+        CategoryNode(Id("french"), "french", Nil),
+        CategoryNode(Id("italian"), "italian", Nil)
       ),
       Seq(TagId("restaurant"))
     )
   )
-  override val root = CategoryNode(Id("categories"), children)
+  override val root = CategoryNode(Id("categories"), "categories", children)
 
   override def toCsv = ???
 
@@ -51,7 +51,7 @@ class CategoriesSpec extends WordSpec with Matchers {
   "Categories collection" should {
 
     "retrieve node by id" in {
-      categories.getNode(Id("action")) shouldBe Some(CategoryNode(Id("action"), Nil))
+      categories.getNode(Id("action")) shouldBe Some(CategoryNode(Id("action"), "action", Nil))
     }
 
     "retrieve descendants of a node" in {
@@ -59,17 +59,17 @@ class CategoriesSpec extends WordSpec with Matchers {
       maybeParent should not be empty
       maybeParent.foreach { parent =>
         categories.getDescendants(parent) should contain theSameElementsAs List(
-          CategoryNode(Id("jazz"), Nil),
-          CategoryNode(Id("pop"), Nil),
-          CategoryNode(Id("rock"), Nil)
+          CategoryNode(Id("jazz"), "jazz", Nil),
+          CategoryNode(Id("pop"), "pop", Nil),
+          CategoryNode(Id("rock"), "rock", Nil)
         )
       }
     }
 
     "retrieve nodes with a tag" in {
       categories.getNodesWithTag(TagId("chinese")) should contain theSameElementsAs List(
-        CategoryNode(Id("chinese"), Nil, Seq(TagId("chinese"))),
-        CategoryNode(Id("chinese"), Nil, Seq(TagId("chinese")))
+        CategoryNode(Id("chinese1"), "chinese", Nil, Seq(TagId("chinese"))),
+        CategoryNode(Id("chinese2"), "chinese", Nil, Seq(TagId("chinese")))
       )
     }
 

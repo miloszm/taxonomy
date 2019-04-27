@@ -4,7 +4,7 @@ import scala.annotation.tailrec
 
 case class Id(id: String)
 
-case class CategoryNode(id: Id, children: Seq[CategoryNode], tags: Seq[TagId] = Nil){
+case class CategoryNode(id: Id, name: String, children: Seq[CategoryNode], tags: Seq[TagId] = Nil){
   def getNode(id: Id): Option[CategoryNode] = {
     if (this.id == id) Some(this)
     else {
