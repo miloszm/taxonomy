@@ -40,7 +40,7 @@ object TestCategories extends Categories {
 
   override def getNode(id: Id): Option[CategoryNode] = root.getNode(id)
 
-  override def getDescendants(categoryNode: CategoryNode): Seq[CategoryNode] = Nil
+  override def getDescendants(categoryNode: CategoryNode): Seq[CategoryNode] = categoryNode.getDescendants
 
   override def toCsv = ???
 
@@ -52,9 +52,11 @@ class CategoriesSpec extends WordSpec with Matchers {
   val categories = TestCategories
 
   "Categories collection" should {
+
     "retrieve node by id" in {
       categories.getNode(Id("action")) shouldBe Some(CategoryNode(Id("action"), Nil))
     }
+
     "retrieve descendants of a node" in {
       val maybeParent = categories.getNode(Id("music"))
       maybeParent should not be empty
