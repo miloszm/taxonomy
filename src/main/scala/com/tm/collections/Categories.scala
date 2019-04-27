@@ -13,9 +13,9 @@ trait Categories {
 
   def getNodesWithTag(tagId: TagId): Seq[CategoryNode] = root.getNodesWithTag(tagId)
 
-  def toCsv(lang: Lang): Stream[String] = {
+  def toCsv(lang: Lang, tags: Tags): Stream[String] = {
     root.getDescendantsWithLevel(0).toStream.map{
-      case (node, level) => ("," * level) + s"${node.asCsv}"
+      case (node, level) => ("," * level) + s"${node.asCsv(lang, tags)}"
     }
   }
 

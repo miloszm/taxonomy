@@ -1,7 +1,7 @@
 package collections
 
-import com.tm.collections.Categories
-import com.tm.domain.{CategoryNode, Id, Lang, TagId}
+import com.tm.collections.{Categories, Tags}
+import com.tm.domain._
 import org.scalatest.{Matchers, WordSpec}
 
 
@@ -42,9 +42,27 @@ object TestCategories extends Categories {
   override def fromCsv(csv: Stream[String]) = ???
 }
 
+object TestTags extends Tags {
+  val chineseTransations = Map(
+    Lang("en_GB") -> "Chinese",
+    Lang("fr_FR") -> "Chinois",
+    Lang("it_IT") -> "Cinese"
+  )
+  val restaurantTranslations = Map(
+    Lang("en_GB") -> "Restaurants",
+    Lang("fr_FR") -> "Restaurants",
+    Lang("it_IT") -> "Restaurantes"
+  )
+  override def tagRepository = Map(
+    TagId("chinese") -> Tag(TagId("chinese"), chineseTransations),
+    TagId("restaurant") -> Tag(TagId("restaurant"), restaurantTranslations)
+  )
+}
+
 class CategoriesSpec extends WordSpec with Matchers {
 
   val categories = TestCategories
+  val tagsRepository = TestTags
 
   "Categories collection" should {
 
@@ -78,20 +96,20 @@ class CategoriesSpec extends WordSpec with Matchers {
     }
 
     "serialise a tree to CSV" in {
-      categories.toCsv(Lang("it_IT")).toList should contain theSameElementsInOrderAs List(
+      categories.toCsv(Lang("it_IT"), tagsRepository).toList should contain theSameElementsInOrderAs List(
         "categories",
         ",shows",
         ",,theatre",
         ",,films",
-        ",,,chinese,chinese",
+        ",,,chinese,Cinese",
         ",,,comedy",
         ",,,action",
         ",music",
         ",,jazz",
         ",,pop",
         ",,rock",
-        ",restaurants,restaurant",
-        ",,chinese,chinese",
+        ",restaurants,Restaurantes",
+        ",,chinese,Cinese",
         ",,french",
         ",,italian"
       )

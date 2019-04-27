@@ -1,6 +1,7 @@
 package collections
 
-import com.tm.domain.{CategoryNode, Id, TagId}
+import com.tm.collections.Tags
+import com.tm.domain._
 import org.scalatest.{Matchers, WordSpec}
 
 class CategoryNodeSpec extends WordSpec with Matchers {
@@ -14,13 +15,24 @@ class CategoryNodeSpec extends WordSpec with Matchers {
     ),
     Seq(TagId("restaurant"))
   )
+  object TestTagsRepository extends Tags {
+    val restaurantTranslations = Map(
+      Lang("en_GB") -> "Restaurants",
+      Lang("fr_FR") -> "Restaurants",
+      Lang("it_IT") -> "Restaurantes"
+    )
+    override def tagRepository = Map(
+      TagId("restaurant") -> Tag(TagId("restaurant"), restaurantTranslations)
+    )
+  }
+  val tagsReporitory = TestTagsRepository
 
   "Category node" should {
     "represent node with tags as CSV" in {
-      node.asCsv shouldBe "restaurants,restaurant"
+      node.asCsv(Lang("en_GB"), tagsReporitory) shouldBe "restaurants,Restaurants"
     }
     "represent node without tags as CSV" in {
-      frenchRestaurantNode.asCsv shouldBe "french"
+      frenchRestaurantNode.asCsv(Lang("en_EN"), tagsReporitory) shouldBe "french"
     }
   }
 }

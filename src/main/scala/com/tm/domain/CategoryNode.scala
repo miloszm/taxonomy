@@ -1,5 +1,7 @@
 package com.tm.domain
 
+import com.tm.collections.Tags
+
 import scala.annotation.tailrec
 
 case class Id(id: String)
@@ -37,8 +39,8 @@ case class CategoryNode(id: Id, name: String, children: Seq[CategoryNode], tags:
     List(this).filter(f).map((_,level)) ++ children.flatMap(_.findAllWithLevel(f, level + 1))
   }
 
-  def asCsv: String = {
-    (name +: tags.map(_.id)).mkString(",")
+  def asCsv(lang: Lang, tagsRepository: Tags): String = {
+    (name +: tags.map(tagsRepository.getTranslation(_, lang))).mkString(",")
   }
 
 }
