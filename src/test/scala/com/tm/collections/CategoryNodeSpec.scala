@@ -6,12 +6,14 @@ import org.scalatest.{Matchers, WordSpec}
 
 class CategoryNodeSpec extends WordSpec with Matchers {
 
+  val chineseRestaurantNode = CategoryNode(Id("chinese2"), "chinese", Nil)
   val frenchRestaurantNode = CategoryNode(Id("french"), "french", Nil)
+  val italianRestaurantNode = CategoryNode(Id("italian"), "italian", Nil)
   val node = CategoryNode(Id("restaurants"), "restaurants",
     List(
-      CategoryNode(Id("chinese2"), "chinese", Nil, Seq(TagId("chinese"))),
-      frenchRestaurantNode,
-      CategoryNode(Id("italian"), "italian", Nil)
+      chineseRestaurantNode.id,
+      frenchRestaurantNode.id,
+      italianRestaurantNode.id
     ),
     Seq(TagId("restaurant"))
   )

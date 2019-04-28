@@ -7,19 +7,19 @@ trait Categories {
 
   def root: CategoryNode
 
-  def getNode(id: Id): Option[CategoryNode] = root.getNode(id)
+  def repository: Map[Id, CategoryNode]
 
-  def getDescendants(categoryNode: CategoryNode): Seq[CategoryNode] = categoryNode.getDescendants
+  def getNode(id: Id): Option[CategoryNode] = root.getNode(id, repository)
 
-  def getNodesWithTag(tagId: TagId): Seq[CategoryNode] = root.getNodesWithTag(tagId)
+  def getDescendants(categoryNode: CategoryNode): Seq[CategoryNode] = categoryNode.getDescendants(repository)
+
+  def getNodesWithTag(tagId: TagId): Seq[CategoryNode] = root.getNodesWithTag(tagId, repository)
 
   def toCsv(lang: Lang, tags: Tags): Stream[String] = {
-    root.getDescendantsWithLevel(0).toStream.map{
-      case (node, level) => ("," * level) + s"${node.asCsv(lang, tags)}"
+    root.getDescendantsWithLevel(0, repository).toStream.map{
+      nodeLevel => ("," * nodeLevel.level) + s"${nodeLevel.node.asCsv(lang, tags)}"
     }
   }
-
-  def fromCsv(csv: Stream[String]): Categories
 
 }
 

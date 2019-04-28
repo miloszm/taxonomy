@@ -10,4 +10,9 @@ trait Tags {
     _.translations.get(lang)
   }.getOrElse("")
 
+  def getTags(lang: Lang, translations: Seq[String]): Seq[Tag] =
+    translations.flatMap{ translation =>
+      tagRepository.values.find(_.translations.get(lang).contains(translation))
+    }
+
 }
