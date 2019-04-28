@@ -3,14 +3,12 @@ package collections
 import com.tm.domain._
 import org.scalatest.{Matchers, WordSpec}
 
-
-
 class CategoriesSpec extends WordSpec with Matchers {
 
   val categories = TestCategories
   val tagsRepository = TestTags
 
-  "Categories collection" should {
+  "Categories tree" should {
 
     "retrieve node by id" in {
       categories.getNode(Id("action")) shouldBe Some(CategoryNode(Id("action"), "action", Nil))

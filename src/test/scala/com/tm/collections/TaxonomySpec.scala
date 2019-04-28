@@ -4,8 +4,6 @@ import com.tm.collections.Taxonomy
 import com.tm.domain._
 import org.scalatest.{Matchers, WordSpec}
 
-
-
 class TaxonomySpec extends WordSpec with Matchers {
 
   val categories = TestCategories
@@ -34,7 +32,7 @@ class TaxonomySpec extends WordSpec with Matchers {
       )
     }
 
-    "deserialise a tree from CSV" in {
+    "deserialise a tree from CSV in French and serialise in English" in {
       val csv = List(
         "categories",
         ",shows",

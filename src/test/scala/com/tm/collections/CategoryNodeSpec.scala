@@ -1,6 +1,5 @@
 package collections
 
-import com.tm.collections.Tags
 import com.tm.domain._
 import org.scalatest.{Matchers, WordSpec}
 
@@ -9,32 +8,14 @@ class CategoryNodeSpec extends WordSpec with Matchers {
   val chineseRestaurantNode = CategoryNode(Id("chinese2"), "chinese", Nil)
   val frenchRestaurantNode = CategoryNode(Id("french"), "french", Nil)
   val italianRestaurantNode = CategoryNode(Id("italian"), "italian", Nil)
-  val node = CategoryNode(Id("restaurants"), "restaurants",
-    List(
-      chineseRestaurantNode.id,
-      frenchRestaurantNode.id,
-      italianRestaurantNode.id
-    ),
-    Seq(TagId("restaurant"))
-  )
-  object TestTagsRepository extends Tags {
-    val restaurantTranslations = Map(
-      Lang("en_GB") -> "Restaurants",
-      Lang("fr_FR") -> "Restaurants",
-      Lang("it_IT") -> "Restaurantes"
-    )
-    override def tagRepository = Map(
-      TagId("restaurant") -> Tag(TagId("restaurant"), restaurantTranslations)
-    )
-  }
-  val tagsReporitory = TestTagsRepository
+  val node = TestCategories.repository.getOrElse(Id("restaurants"), throw new IllegalStateException("test node not found"))
 
   "Category node" should {
     "represent node with tags as CSV" in {
-      node.asCsv(Lang("en_GB"), tagsReporitory) shouldBe "restaurants,Restaurants"
+      node.asCsv(Lang("en_GB"), TestTags) shouldBe "restaurants,Restaurants"
     }
     "represent node without tags as CSV" in {
-      frenchRestaurantNode.asCsv(Lang("en_EN"), tagsReporitory) shouldBe "french"
+      frenchRestaurantNode.asCsv(Lang("en_EN"), TestTags) shouldBe "french"
     }
   }
 }

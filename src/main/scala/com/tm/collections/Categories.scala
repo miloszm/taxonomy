@@ -1,7 +1,6 @@
 package com.tm.collections
 
-import com.tm.domain.{CategoryNode, Id, Lang, TagId}
-
+import com.tm.domain.{CategoryNode, Id, TagId}
 
 trait Categories {
 
@@ -16,4 +15,3 @@ trait Categories {
   def getNodesWithTag(tagId: TagId): Seq[CategoryNode] = root.getNodesWithTag(tagId, repository)
 
 }
-
