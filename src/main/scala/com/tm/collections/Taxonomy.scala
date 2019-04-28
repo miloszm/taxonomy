@@ -1,8 +1,17 @@
 package com.tm.collections
 
+import com.tm.collections.Taxonomy.Separator
 import com.tm.domain.{CategoryNode, Id, Lang, NodeLevel}
 
-case class Taxonomy(override val root: CategoryNode, override val repository: Map[Id, CategoryNode]) extends Categories
+case class Taxonomy(override val root: CategoryNode, override val repository: Map[Id, CategoryNode]) extends Categories {
+
+  def toCsv(lang: Lang, tags: Tags): Stream[String] = {
+    root.getDescendantsWithLevel(0, repository).toStream.map{
+      nodeLevel => (Separator.toString * nodeLevel.level) + s"${nodeLevel.node.asCsv(lang, tags)}"
+    }
+  }
+
+}
 
 object Taxonomy {
 
